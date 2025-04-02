@@ -8,4 +8,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UsersMapper {
     @Select("SELECT * FROM Users")
     Users ListAll();
+
+    @Select("SELECT * from USERS WHERE EMAIL = #{email}")
+    Users findByEmail(String email);
 }
