@@ -12,7 +12,5 @@ public class Users {
     private String password;
     private int role; //role 1:管理员,2:普通用户
     private Timestamp last_login;
-    private Timestamp created_time;
+    private Timestamp create_time;
 }
-
-
