@@ -56,13 +56,11 @@ public class security {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec ->
-                {
-                    authorizeExchangeSpec
-                            .pathMatchers("/api/login", "/api/register", "/")
-                            .permitAll()
-                            .anyExchange()
-                            .authenticated();
-                })
+                        authorizeExchangeSpec
+                                .pathMatchers("/api/login", "/api/register", "/")
+                                .permitAll()
+                                .anyExchange()
+                                .authenticated())
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(new WebSessionServerSecurityContextRepository())
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
