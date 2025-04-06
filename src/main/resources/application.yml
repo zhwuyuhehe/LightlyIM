@@ -34,6 +34,11 @@ spring:
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     time-zone: Asia/Shanghai
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitRoot
+    password: rabbitRoot
 logging:
   level:
     root: info
