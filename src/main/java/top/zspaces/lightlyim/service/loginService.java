@@ -20,9 +20,7 @@ public class loginService {
     private final UsersMapper um;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
     public Mono<Authentication> authenticate(String email, String password) {
-
         return Mono.fromSupplier(
                 () -> um.FindByEmail(email)
         ).filter(

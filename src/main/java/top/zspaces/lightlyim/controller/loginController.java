@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
 import top.zspaces.lightlyim.service.loginService;
 
@@ -27,7 +29,7 @@ public class loginController {
     private final loginService loginService;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<Map<String, Object>>> login(@RequestBody Map<String, String> loginKey) {
+    public Mono<ResponseEntity<Map<String, Object>>> login(@RequestBody Map<String, String> loginKey, ServerWebExchange exchange) {
         String email = loginKey.get("email");
         String password = loginKey.get("password");
 
@@ -42,6 +44,11 @@ public class loginController {
                             .stream()
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.toList()));
+                    userInfo.put("isAdmin", userDetails.getAuthorities().stream()
+                            .anyMatch(
+                                    grantedAuthority ->
+                                            grantedAuthority.getAuthority()
+                                                    .equals("ROLE_ADMIN")));
 
                     Map<String, Object> response = new HashMap<>();
                     response.put("code", 200);
@@ -49,15 +56,46 @@ public class loginController {
                     response.put("role", userDetails.getAuthorities());
                     response.put("user", userInfo);
 
-                    return Mono.just(ResponseEntity.ok(response));
+                    return exchange.getSession().doOnNext(
+                                    webSession -> webSession.getAttributes()
+                                            .put("UserInfo", userDetails))
+                            .thenReturn(ResponseEntity.ok(response));
+
                 })
                 .switchIfEmpty(Mono.defer(() -> {
                     log.warn("用户 {} 登录失败：用户名或密码错误", email);
                     Map<String, Object> errorResponse = new HashMap<>();
                     errorResponse.put("code", 401);
                     errorResponse.put("message", "用户名或密码错误");
-                    return Mono.just(ResponseEntity.status(401).body(errorResponse));
+                    return Mono.just(ResponseEntity.ok(errorResponse));
                 }));
+    }
+
+    @PostMapping("/WhoAmI")
+    public Mono<ResponseEntity<Map<String, Object>>> whoAmI(ServerWebExchange exchange) {
+        return exchange.getSession()
+                .map(WebSession::getAttributes)
+                .map(attrs -> {
+                    Object user = attrs.get("UserInfo");
+                    if (user != null) {
+                        boolean isAdmin = false;
+                        if (user instanceof UserDetails userDetails) {
+                            isAdmin = userDetails.getAuthorities().stream()
+                                    .anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
+                        }
+                        return ResponseEntity.ok(Map.of(
+                                "code", 200,
+                                "message", "获取成功",
+                                "isAdmin", isAdmin,
+                                "user", user
+                        ));
+                    } else {
+                        return ResponseEntity.status(401).body(Map.of(
+                                "code", 401,
+                                "message", "未登录"
+                        ));
+                    }
+                });
     }
 
 }
