@@ -57,7 +57,9 @@ public class security {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec
-                                .pathMatchers("/api/login", "/api/register", "/")
+                                .pathMatchers("/api/login", "/api/register", "/","/api/logout")
+                                .permitAll()
+                                .pathMatchers("/api/me")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated())
