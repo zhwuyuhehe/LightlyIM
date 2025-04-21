@@ -10,7 +10,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMsg implements Serializable {
-    private String from;
+    private int id;
+    private String from_user;
     private String content;
     private String type;
     private Long timestamp;

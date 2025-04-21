@@ -38,10 +38,8 @@ public class webSocketHandler implements WebSocketHandler {
                             .map(WebSocketMessage::getPayloadAsText)
                             .flatMap(msg->{
                                 ChatMsg chatMsg = JSON.parseObject(msg, ChatMsg.class);
-                                chatMsg.setFrom(email);
+                                chatMsg.setFrom_user(email);
                                 chatMsg.setTimestamp(System.currentTimeMillis());
-                                log.warn(JSON.toJSONString(chatMsg));
-
                                 chatMsgSender.send(chatMsg);
                                 return Mono.empty();
                             })

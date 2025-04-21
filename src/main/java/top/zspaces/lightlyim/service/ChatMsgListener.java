@@ -14,12 +14,10 @@ import top.zspaces.lightlyim.entity.ChatMsg;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ChatMsgListener {
     private final WebSocketSessionManager webSocketSessionManager;
-
+    private final ChatSave chatSave;
     @RabbitListener(queues = rabbitMQ.QUEUE_NAME)
     public void handleChatMsg(ChatMsg chatMsg) {
-
-        log.info("接收到MQ的信息: {}", chatMsg);
-
+        chatSave.saveChatMsgToRedis(chatMsg);
         webSocketSessionManager.broadcastUserMsg(JSON.toJSONString(chatMsg));
     }
 

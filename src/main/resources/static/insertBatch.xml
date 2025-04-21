@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.zspaces.lightlyim.mapper.ChatMsgMapper">
+
+    <!--
+      批量插入方法
+      messages: List<ChatMsg>
+    -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO CHATHISTORY (ID, FROM_USER, CONTENT, TYPE, TIMESTAMP)
+        VALUES
+        <foreach collection="messages" item="msg" separator=",">
+            (#{msg.id}, #{msg.from_user}, #{msg.content}, #{msg.type}, NOW())
+        </foreach>
+    </insert>
+
+</mapper>
