@@ -5,7 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
+import top.zspaces.lightlyim.entity.Users;
 import top.zspaces.lightlyim.service.loginService;
 
 import java.util.HashMap;
@@ -34,11 +39,12 @@ public class loginController {
         String password = loginKey.get("password");
 
         return loginService.authenticate(email, password)
-
                 .flatMap(auth -> {
                     UserDetails userDetails = (UserDetails) auth.getPrincipal(); // 获取用户信息
+                    Users users = (Users) auth.getDetails();
                     Map<String, Object> userInfo = new HashMap<>();
                     userInfo.put("email", userDetails.getUsername());
+                    userInfo.put("nickname", users.getNickname());
                     userInfo.put("roles", userDetails
                             .getAuthorities()
                             .stream()
@@ -56,10 +62,17 @@ public class loginController {
                     response.put("role", userDetails.getAuthorities());
                     response.put("user", userInfo);
 
-                    return exchange.getSession().doOnNext(
-                                    webSession -> webSession.getAttributes()
-                                            .put("UserInfo", userDetails))
-                            .thenReturn(ResponseEntity.ok(response));
+                    SecurityContext context = new SecurityContextImpl(auth);
+                    WebSessionServerSecurityContextRepository securityContextRepository = new WebSessionServerSecurityContextRepository();
+
+                    return securityContextRepository.save(exchange, context).thenReturn(ResponseEntity.ok(response));
+
+
+
+//                    return exchange.getSession().doOnNext(
+//                                    webSession -> webSession.getAttributes()
+//                                            .put("UserInfo", userDetails))
+//                            .thenReturn(ResponseEntity.ok(response));
 
                 })
                 .switchIfEmpty(Mono.defer(() -> {
@@ -72,16 +85,20 @@ public class loginController {
     }
 
     @PostMapping("/WhoAmI")
-    public Mono<ResponseEntity<Map<String, Object>>> whoAmI(ServerWebExchange exchange) {
-        return exchange.getSession()
-                .map(WebSession::getAttributes)
-                .map(attrs -> {
-                    Object user = attrs.get("UserInfo");
+    public Mono<ResponseEntity<Map<String, Object>>> whoAmI() {
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(authentication -> {
+//                    todo 修改这里
+                    Object user = authentication.getPrincipal();
+                    boolean isAdmin = false;
                     if (user != null) {
-                        boolean isAdmin = false;
                         if (user instanceof UserDetails userDetails) {
-                            isAdmin = userDetails.getAuthorities().stream()
-                                    .anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
+                            isAdmin = userDetails
+                                    .getAuthorities()
+                                    .stream()
+                                    .anyMatch(g ->
+                                            g.getAuthority().equals("ROLE_ADMIN"));
                         }
                         return ResponseEntity.ok(Map.of(
                                 "code", 200,

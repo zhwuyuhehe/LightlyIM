@@ -2,10 +2,11 @@ package top.zspaces.lightlyim.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
-public class Users {
+public class Users implements Serializable {
     private int id;
     private String nickname;
     private String email;

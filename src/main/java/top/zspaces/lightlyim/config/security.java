@@ -53,18 +53,18 @@ public class security {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity,ReactiveAuthenticationManager reactiveAuthenticationManager) {
         serverHttpSecurity
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec
                                 .pathMatchers("/api/login", "/api/register", "/","/api/logout")
                                 .permitAll()
-                                .pathMatchers("/api/me")
-                                .permitAll()
-                                .anyExchange()
-                                .authenticated())
+                                .pathMatchers("/api/WhoAmI","/ws/**","/api/ws/online")
+                                .authenticated()
+                                .anyExchange().authenticated()
+                )
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(new WebSessionServerSecurityContextRepository())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .logout(ServerHttpSecurity.LogoutSpec::disable);
         return serverHttpSecurity.build();

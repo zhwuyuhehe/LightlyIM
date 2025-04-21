@@ -28,10 +28,13 @@ public class loginService {
         ).map(
                 users -> {
                     UserDetails userDetails = User.withUsername(users.getEmail())
-                            .password(bCryptPasswordEncoder.encode(password))
+                            .password(password)
                             .roles(users.getRole() == 1 ? "ADMIN" : "USER")
                             .build();
-                    return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken token =
+                    new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+                    token.setDetails(users);
+                    return token;
                 }
         );
     }

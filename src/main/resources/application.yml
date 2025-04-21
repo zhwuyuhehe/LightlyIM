@@ -3,7 +3,7 @@ spring:
     redis:
       repository-type: indexed
       save-mode: always
-      namespace: lightlyIM:session
+      namespace: LightlyIM
     timeout: 5m
   application:
     name: LightlyIM
