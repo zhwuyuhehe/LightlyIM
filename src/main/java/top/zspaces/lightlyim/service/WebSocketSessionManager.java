@@ -49,7 +49,7 @@ public class WebSocketSessionManager {
 
         String json = JSON.toJSONString(msg);
         onlineUsers.values().forEach(session ->
-                session.send(Mono.just(session.textMessage(json))).subscribe(null, e -> {log.error(e.toString(), e);}));
+                session.send(Mono.just(session.textMessage(json))).subscribe(null, e -> log.error(e.toString(), e)));
 
     }
 

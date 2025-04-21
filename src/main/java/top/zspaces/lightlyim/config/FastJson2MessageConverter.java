@@ -7,7 +7,6 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.amqp.support.converter.MessageConverter;
 import top.zspaces.lightlyim.entity.ChatMsg;
 
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 
 public class FastJson2MessageConverter implements MessageConverter {

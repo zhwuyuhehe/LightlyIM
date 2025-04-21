@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
 import top.zspaces.lightlyim.entity.Users;
 import top.zspaces.lightlyim.service.loginService;
@@ -89,7 +88,6 @@ public class loginController {
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .map(authentication -> {
-//                    todo 修改这里
                     Object user = authentication.getPrincipal();
                     boolean isAdmin = false;
                     if (user != null) {
