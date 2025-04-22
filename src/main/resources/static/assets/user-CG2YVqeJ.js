@@ -1,0 +1,1 @@
+import{G as t,k as e}from"./index-7JKY8DTR.js";const v=t("user",()=>{const n=e(""),o=e(""),l=e(""),u=e(),a=e(!1);function r(s){n.value=s.email,o.value=s.nickname,l.value=s.roles,u.value=s.isAdmin,a.value=!0}function i(){n.value="",l.value="",o.value="",u.value=!1,a.value=!1}return{email:n,roles:l,nickname:o,isAdmin:u,isLoggedIn:a,setUserInfo:r,logout:i}});export{v as u};

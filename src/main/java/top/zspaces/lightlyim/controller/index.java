@@ -19,7 +19,7 @@ public class index {
         this.webSocketSessionManager = webSocketSessionManager;
     }
 
-    @GetMapping("/")
+    @GetMapping("/AllUsers")
     public ResponseEntity<JSONArray> indexView() {
         return ResponseEntity.ok(JSONArray.from(UM.ListAll()));
     }

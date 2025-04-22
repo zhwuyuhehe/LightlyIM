@@ -1,0 +1,1 @@
+import{d as s,c as a,b as r,a as u,w as l,r as m,F as p,g as c,u as d,j as _}from"./index-7JKY8DTR.js";const C=s({__name:"AdminView",setup(i){const t=d(),o=()=>{t.push("/")};return(f,e)=>{const n=m("el-button");return _(),a(p,null,[e[1]||(e[1]=r("h2",null," 当前是管理页面 ",-1)),u(n,{onClick:o},{default:l(()=>e[0]||(e[0]=[c(" 回到主页 ")])),_:1})],64)}}});export{C as default};
