@@ -36,7 +36,7 @@ spring:
 
   security:
     user:
-      name: user
+      name: admin
       password: admin
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat

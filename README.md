@@ -20,7 +20,7 @@ LightlyIM是一个学习构建的轻量化在线聊天系统前端，支持 WebS
 
 ---
 
-##  技术栈
+## 技术栈
 
 | 技术                                                                      | 说明            |
 |-------------------------------------------------------------------------|---------------|
@@ -32,6 +32,37 @@ LightlyIM是一个学习构建的轻量化在线聊天系统前端，支持 WebS
 | [WebSocket](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket) | 实时通信          |
 
 ---
+
+## 接口地址说明
+
+1. > 系统后端接口 8080
+2. > RabbiMQ设置为rabbitmq:host:
+   >
+   >localhost;
+   port: 5672;
+   username: rabbitRoot;
+   password: rabbitRoot;
+
+3. > Redis接口
+   > redis:
+   >
+   > port: 6379;
+   > database: 0;
+   > host: localhost ;
+   >
+   > 并使用了**lettuce**
+   > 设置为
+   > pool:
+   > enabled: true
+   > max-active: 20
+   > max-idle: 10
+
+4. > Spring-Session设置为spring:session:
+   > **redis:**
+   > repository-type: indexed;
+   > save-mode: always;
+   > namespace: LightlyIM;
+   > timeout: 5m
 
 ## 等待补充说明...
 
