@@ -11,6 +11,8 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 import top.zspaces.lightlyim.entity.ChatMsg;
 
+import java.sql.Timestamp;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -39,7 +41,7 @@ public class webSocketHandler implements WebSocketHandler {
                             .flatMap(msg->{
                                 ChatMsg chatMsg = JSON.parseObject(msg, ChatMsg.class);
                                 chatMsg.setFrom_user(email);
-                                chatMsg.setTimestamp(System.currentTimeMillis());
+                                chatMsg.setTimestamp(new Timestamp(System.currentTimeMillis()));
                                 chatMsgSender.send(chatMsg);
                                 return Mono.empty();
                             })

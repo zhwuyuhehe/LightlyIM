@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -14,5 +15,5 @@ public class ChatMsg implements Serializable {
     private String from_user;
     private String content;
     private String type;
-    private Long timestamp;
+    private Timestamp timestamp;
 }

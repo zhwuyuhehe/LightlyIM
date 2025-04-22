@@ -58,7 +58,7 @@ public class security {
                         authorizeExchangeSpec
                                 .pathMatchers("/api/login", "/api/register", "/","/api/logout")
                                 .permitAll()
-                                .pathMatchers("/api/WhoAmI","/ws/**","/api/ws/online")
+                                .pathMatchers("/api/WhoAmI","/ws/**","/api/ws/online","api/chatHistory")
                                 .authenticated()
                                 .anyExchange().authenticated()
                 )

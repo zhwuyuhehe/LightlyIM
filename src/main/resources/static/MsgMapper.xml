@@ -5,10 +5,6 @@
 
 <mapper namespace="top.zspaces.lightlyim.mapper.ChatMsgMapper">
 
-    <!--
-      批量插入方法
-      messages: List<ChatMsg>
-    -->
     <insert id="insertBatch" parameterType="java.util.List">
         INSERT INTO CHATHISTORY (ID, FROM_USER, CONTENT, TYPE, TIMESTAMP)
         VALUES
@@ -16,5 +12,12 @@
             (#{msg.id}, #{msg.from_user}, #{msg.content}, #{msg.type}, NOW())
         </foreach>
     </insert>
+
+    <select id="selectHistory" resultType="top.zspaces.lightlyim.entity.ChatMsg">
+        SELECT ID, FROM_USER, CONTENT, TYPE, TIMESTAMP
+        FROM CHATHISTORY
+        ORDER BY ID DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
 
 </mapper>

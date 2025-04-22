@@ -20,4 +20,6 @@ public interface ChatMsgMapper {
 
 
     void insertBatch(@Param("messages") List<ChatMsg> messages);
+
+    List<ChatMsg> selectHistory(@Param("offset") int offset, @Param("limit") int limit);
 }
